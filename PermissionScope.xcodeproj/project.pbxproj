@@ -79,7 +79,6 @@
 		2487CEE01B87B01E00766A1A /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		2487CEE21B87B05200766A1A /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		2487CEE41B87B61E00766A1A /* Structs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
-		2AAAB4471F7E2B57000B66BE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2AAAB4491F7E2B6C000B66BE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		D05F103E1AD1EBF6000F8267 /* PermissionScope-example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PermissionScope-example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05F10411AD1EBF6000F8267 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -430,7 +429,6 @@
 		2AAAB4481F7E2B57000B66BE /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2AAAB4471F7E2B57000B66BE /* en */,
 				2AAAB4491F7E2B6C000B66BE /* zh-Hans */,
 			);
 			name = Localizable.strings;

@@ -1186,9 +1186,18 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
             style: .default,
             handler: { action in
                 NotificationCenter.default.addObserver(self, selector: #selector(self.appForegroundedAfterSettings), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-                
-                let settingsUrl = URL(string: UIApplicationOpenSettingsURLString)
+               
+                var settingsUrl = URL(string: UIApplicationOpenSettingsURLString)
+                if permission == .locationInUse || permission == .locationAlways {
+                    if #available(iOS 10.0, *) {
+                        settingsUrl = URL(string: "App-Prefs:root=LOCATION_SERVICES")
+                    } else {
+                        // Fallback on earlier versions
+                        settingsUrl = URL(string: "prefs:root=LOCATION_SERVICES")
+                    };
+                }
                 UIApplication.shared.openURL(settingsUrl!)
+                
         }))
         
         DispatchQueue.main.async {

@@ -81,8 +81,7 @@ class ViewController: UIViewController {
     @IBAction func noUIPerm() {
 //        noUIPscope.requestNotifications()
         testPscope.viewControllerForAlerts = self
-        testPscope.requestEvents()
-        testPscope.s
+        testPscope.requestLocationInUse()
     }
 }
 
