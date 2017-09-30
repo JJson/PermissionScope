@@ -13,7 +13,7 @@ class ViewController: UIViewController {
     let singlePscope = PermissionScope()
     let multiPscope = PermissionScope()
     let noUIPscope = PermissionScope()
-
+    let testPscope = PermissionScope()
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -56,6 +56,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func singlePerm() {
+        singlePscope.show()
         singlePscope.show(
             { finished, results in
                 print("got results \(results)")
@@ -78,7 +79,10 @@ class ViewController: UIViewController {
     }
 
     @IBAction func noUIPerm() {
-        noUIPscope.requestNotifications()
+//        noUIPscope.requestNotifications()
+        testPscope.viewControllerForAlerts = self
+        testPscope.requestEvents()
+        testPscope.s
     }
 }
 

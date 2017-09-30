@@ -24,10 +24,14 @@
 	<true/>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Explanation why you need bluetooth in the background</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string></string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>always</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>when in use</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string></string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-peripheral</string>

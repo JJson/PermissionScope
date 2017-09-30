@@ -23,8 +23,34 @@ extension UIColor {
 extension String {
     /// NSLocalizedString shorthand
     var localized: String {
+        
         return NSLocalizedString(self, comment: "")
     }
+    
+    func localized(withArguments arguments: String...) -> String {
+        return localized(withArguments: arguments, placeholder: "%@")
+    }
+    
+    func localized(withArguments arguments: String..., placeholder:String) -> String {
+        return localized(withArguments: arguments, placeholder: placeholder)
+    }
+    
+    func localized(withArguments arguments:[String], placeholder:String) -> String {
+        var tmp = NSLocalizedString(self, comment: "")
+        var range = tmp.startIndex..<tmp.endIndex
+        var index = 0
+        while range.lowerBound < range.upperBound {
+            let plRange = tmp.range(of: placeholder, options: .literal, range: range, locale: nil)
+            if plRange == nil || index >= arguments.count{
+                break
+            }
+            tmp = tmp.replacingOccurrences(of: placeholder, with: arguments[index], options: .literal, range: plRange)
+            index += 1
+            range = plRange?.upperBound ..< tmp.endIndex
+        }
+        return tmp
+    }
+    
 }
 
 extension CGRect {

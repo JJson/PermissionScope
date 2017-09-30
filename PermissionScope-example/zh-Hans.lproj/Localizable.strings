@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  PermissionScope
+
+  Created by linjj on 2017/9/29.
+  Copyright © 2017年 That Thing in Swift. All rights reserved.
+*/
+"Permission for %@ was denied." = "%@权限未打开";
+"Please enable access to %@ in the Settings app" = "请到设置中开启%@权限";
+"Show me" = "去开启";
+"OK" = "好的";
+"Contacts" = "通讯录";
+"Events" = "日历";
+"Location" = "定位";
+"Notifications" = "通知";
+"Microphone" = "麦克风";
+"Camera" = "相机";
+"Photos" = "相册";
+"Reminders" = "提醒事项";
+"Bluetooth" = "蓝牙";
+"Motion" = "运动";
