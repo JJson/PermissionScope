@@ -46,7 +46,7 @@ extension String {
             }
             tmp = tmp.replacingOccurrences(of: placeholder, with: arguments[index], options: .literal, range: plRange)
             index += 1
-            range = plRange?.upperBound ..< tmp.endIndex
+            range = (plRange?.upperBound)!..<tmp.endIndex
         }
         return tmp
     }
