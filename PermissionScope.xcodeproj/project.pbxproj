@@ -495,14 +495,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 22Y7XV72K5;
 				INFOPLIST_FILE = "PermissionScope-example/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.newcunnar.PermissionScope-example";
 				PRODUCT_NAME = "PermissionScope-example";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "50f34d74-006b-4d41-a92e-9722528a1e67";
+				PROVISIONING_PROFILE_SPECIFIER = test_team;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

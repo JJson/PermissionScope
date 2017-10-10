@@ -25,7 +25,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>prefs</string>
+				<string>Prefs</string>
 			</array>
 		</dict>
 	</array>
@@ -38,11 +38,9 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string></string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Always and When In Use Usage Description</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>always</string>
-	<key>NSLocationUsageDescription</key>
-	<string></string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>when in use</string>
 	<key>NSPhotoLibraryUsageDescription</key>

@@ -102,7 +102,8 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
 	/// View controller to be used when presenting alerts. Defaults to self. You'll want to set this if you are calling the `request*` methods directly.
 	public var viewControllerForAlerts : UIViewController?
 
-    public var messageOfDeniedOrDisableAlert : String?
+    public var messageOfDeniedAlert : String?
+    public var messageOfDisableAlert : String?
     /**
     Checks whether all the configured permission are authorized or not.
     
@@ -1144,7 +1145,7 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         }
         let dis = permission.prettyDescription.localized
         let alert = UIAlertController(title: "Permission for %@ was denied.".localized(withArguments: dis),
-                                      message: messageOfDeniedOrDisableAlert != nil ? messageOfDeniedOrDisableAlert:"Please enable access to %@ in the Settings app".localized(withArguments: dis),
+                                      message: messageOfDeniedAlert != nil ? messageOfDeniedAlert:"Please enable access to %@ in the Settings app".localized(withArguments: dis),
             preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK".localized,
             style: .cancel,
@@ -1176,36 +1177,43 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
                 onDisabledOrDenied(results)
             })
         }
-        
+        messageOfDisableAlert = "Please enable access to %@ in Settings".localized(withArguments: permission.prettyDescription.localized, placeholder: "%@")
+        if permission == .locationInUse {
+            messageOfDisableAlert = "Please enable access to %@ in the Settings→Privacy→Location Service".localized(withArguments: permission.prettyDescription.localized, placeholder: "%@")
+        }
         let alert = UIAlertController(title: "%@ is currently disabled.".localized(withArguments: permission.prettyDescription.localized),
-                                      message: messageOfDeniedOrDisableAlert != nil ? messageOfDeniedOrDisableAlert : "Please enable access to \(permission.prettyDescription) in Settings".localized,
+                                      message: messageOfDisableAlert,
             preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK".localized,
             style: .cancel,
             handler: nil))
-        alert.addAction(UIAlertAction(title: "Show me".localized,
-            style: .default,
-            handler: { action in
-                NotificationCenter.default.addObserver(self, selector: #selector(self.appForegroundedAfterSettings), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-               
-                var settingsUrl = URL(string: UIApplicationOpenSettingsURLString)
-                if permission == .locationInUse || permission == .locationAlways {
-                    if #available(iOS 10.0, *) {
-                        settingsUrl = URL(string: "App-Prefs:root=Privacy&path=LOCATION")
-                        if UIApplication.shared.canOpenURL(settingsUrl!) {
-                            UIApplication.shared.open(settingsUrl!, options: [:], completionHandler: { (_) in
-                            })
-                        }
-                        
-                    } else {
-                        // Fallback on earlier versions
-                        settingsUrl = URL(string: "prefs:root=LOCATION_SERVICES")
-                         UIApplication.shared.openURL(settingsUrl!)
-                    };
-                }
-//                UIApplication.shared.openURL(settingsUrl!)
-                
-        }))
+        if #available(iOS 11.0, *) {
+
+        }
+        else {
+            alert.addAction(UIAlertAction(title: "Show me".localized,
+                                          style: .default,
+                                          handler: { action in
+                                            NotificationCenter.default.addObserver(self, selector: #selector(self.appForegroundedAfterSettings), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+                                            
+                                            var settingsUrl = URL(string: UIApplicationOpenSettingsURLString)
+                                            if permission == .locationInUse || permission == .locationAlways {
+                                                if #available(iOS 10.0, *) {
+                                                    settingsUrl = URL(string: "App-Prefs:root=Privacy&path=LOCATION")
+                                                    if UIApplication.shared.canOpenURL(settingsUrl!) {
+                                                        UIApplication.shared.open(settingsUrl!, options: [:], completionHandler: { (_) in
+                                                        })
+                                                    }
+                                                    
+                                                } else {
+                                                    // Fallback on earlier versions
+                                                    settingsUrl = URL(string: "prefs:root=LOCATION_SERVICES")
+                                                    UIApplication.shared.openURL(settingsUrl!)
+                                                };
+                                            }
+            }))
+        }
+        
         
         DispatchQueue.main.async {
             self.viewControllerForAlerts?.present(alert,
