@@ -11,6 +11,7 @@
 "Please enable access to %@ in the Settings→Privacy→Location Service" = "请到设置→隐私→定位服务中开启%@权限";
 "Show me" = "去开启";
 "OK" = "好的";
+"Cancel" = "取消";
 "Contacts" = "通讯录";
 "Events" = "日历";
 "Location" = "定位";

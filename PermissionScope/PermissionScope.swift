@@ -421,7 +421,7 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     /**
     Requests access to LocationAlways, if necessary.
     */
-    public func requestLocationAlways() {
+    public func requestLocationAlways(_ handlerForOkAction:(() -> Swift.Void)? = nil) {
     	let hasAlwaysKey:Bool = !Bundle.main
     		.object(forInfoDictionaryKey: Constants.InfoPlistKeys.locationAlways).isNil
     	assert(hasAlwaysKey, Constants.InfoPlistKeys.locationAlways + " not found in Info.plist.")
@@ -437,7 +437,7 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         case .unauthorized:
             self.showDeniedAlert(.locationAlways)
         case .disabled:
-            self.showDisabledAlert(.locationInUse)
+            self.showDisabledAlert(.locationInUse, handlerForOkAction: handlerForOkAction)
         default:
             break
         }
@@ -467,7 +467,7 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     /**
     Requests access to LocationWhileInUse, if necessary.
     */
-    public func requestLocationInUse() {
+    public func requestLocationInUse(_ handlerForOkAction:(() -> Swift.Void)? = nil) {
     	let hasWhenInUseKey :Bool = !Bundle.main
     		.object(forInfoDictionaryKey: Constants.InfoPlistKeys.locationWhenInUse).isNil
     	assert(hasWhenInUseKey, Constants.InfoPlistKeys.locationWhenInUse + " not found in Info.plist.")
@@ -479,7 +479,7 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         case .unauthorized:
             self.showDeniedAlert(.locationInUse)
         case .disabled:
-            self.showDisabledAlert(.locationInUse)
+            self.showDisabledAlert(.locationInUse, handlerForOkAction: handlerForOkAction)
         default:
             break
         }
@@ -1172,6 +1172,13 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     */
     func showDisabledAlert(_ permission: PermissionType) {
         // compile the results and pass them back if necessary
+        showDisabledAlert(permission) {
+            
+        }
+        
+    }
+    func showDisabledAlert(_ permission: PermissionType, handlerForOkAction:(() -> Swift.Void)? = nil) {
+        // compile the results and pass them back if necessary
         if let onDisabledOrDenied = self.onDisabledOrDenied {
             self.getResultsForConfig({ results in
                 onDisabledOrDenied(results)
@@ -1184,11 +1191,15 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         let alert = UIAlertController(title: "%@ is currently disabled.".localized(withArguments: permission.prettyDescription.localized),
                                       message: messageOfDisableAlert,
             preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK".localized,
+        alert.addAction(UIAlertAction(title: "Cancel".localized,
             style: .cancel,
             handler: nil))
         if #available(iOS 11.0, *) {
-
+            alert.addAction(UIAlertAction(title: "OK".localized,
+                                          style: .default,
+                                          handler: { (action) in
+                                            handlerForOkAction?()
+            }))
         }
         else {
             alert.addAction(UIAlertAction(title: "Show me".localized,
