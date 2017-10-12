@@ -1184,16 +1184,13 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
                 onDisabledOrDenied(results)
             })
         }
-        messageOfDisableAlert = "Please enable access to %@ in Settings".localized(withArguments: permission.prettyDescription.localized, placeholder: "%@")
-        if permission == .locationInUse {
-            messageOfDisableAlert = "Please enable access to %@ in the Settings→Privacy→Location Service".localized(withArguments: permission.prettyDescription.localized, placeholder: "%@")
-        }
+        
         let alert = UIAlertController(title: "%@ is currently disabled.".localized(withArguments: permission.prettyDescription.localized),
-                                      message: messageOfDisableAlert,
-            preferredStyle: .alert)
+                                      message: messageOfDisableAlert != nil ? messageOfDeniedAlert:"Please enable access to %@ in Settings".localized(withArguments: permission.prettyDescription.localized, placeholder: "%@"),
+                                      preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel".localized,
-            style: .cancel,
-            handler: nil))
+                                      style: .cancel,
+                                      handler: nil))
         if #available(iOS 11.0, *) {
             alert.addAction(UIAlertAction(title: "OK".localized,
                                           style: .default,

@@ -8,7 +8,6 @@
 "Permission for %@ was denied." = "%@权限未打开";
 "%@ is currently disabled." = "%@设置未开启";
 "Please enable access to %@ in the Settings app" = "请到设置中开启%@权限";
-"Please enable access to %@ in the Settings→Privacy→Location Service" = "请到设置→隐私→定位服务中开启%@权限";
 "Show me" = "去开启";
 "OK" = "好的";
 "Cancel" = "取消";
