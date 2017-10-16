@@ -467,7 +467,8 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     /**
     Requests access to LocationWhileInUse, if necessary.
     */
-    public func requestLocationInUse(_ handlerForOkAction:(() -> Swift.Void)? = nil) {
+    public func requestLocationInUse(_ handlerForOkAction:(() -> Swift.Void)? = nil,
+                                     handlerForCancelAction:(() -> Swift.Void)? = nil) {
     	let hasWhenInUseKey :Bool = !Bundle.main
     		.object(forInfoDictionaryKey: Constants.InfoPlistKeys.locationWhenInUse).isNil
     	assert(hasWhenInUseKey, Constants.InfoPlistKeys.locationWhenInUse + " not found in Info.plist.")
@@ -477,9 +478,9 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         case .unknown:
             locationManager.requestWhenInUseAuthorization()
         case .unauthorized:
-            self.showDeniedAlert(.locationInUse)
+            self.showDeniedAlert(.locationInUse, handlerForCancelAction: handlerForCancelAction)
         case .disabled:
-            self.showDisabledAlert(.locationInUse, handlerForOkAction: handlerForOkAction)
+            self.showDisabledAlert(.locationInUse, handlerForOkAction: handlerForOkAction, handlerForCancelAction: handlerForCancelAction)
         default:
             break
         }
@@ -1136,7 +1137,8 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     
     - parameter permission: Permission type.
     */
-    func showDeniedAlert(_ permission: PermissionType) {
+    func showDeniedAlert(_ permission: PermissionType,
+                         handlerForCancelAction:(() -> Swift.Void)? = nil) {
         // compile the results and pass them back if necessary
         if let onDisabledOrDenied = self.onDisabledOrDenied {
             self.getResultsForConfig({ results in
@@ -1147,9 +1149,11 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         let alert = UIAlertController(title: "Permission for %@ was denied.".localized(withArguments: dis),
                                       message: messageOfDeniedAlert != nil ? messageOfDeniedAlert:"Please enable access to %@ in the Settings app".localized(withArguments: dis),
             preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK".localized,
-            style: .cancel,
-            handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel".localized,
+                                      style: .cancel,
+                                      handler: { (action) in
+                                        handlerForCancelAction?()
+        }))
         alert.addAction(UIAlertAction(title: "Show me".localized,
             style: .default,
             handler: { action in
@@ -1170,14 +1174,9 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     
     - parameter permission: Permission type.
     */
-    func showDisabledAlert(_ permission: PermissionType) {
-        // compile the results and pass them back if necessary
-        showDisabledAlert(permission) {
-            
-        }
-        
-    }
-    func showDisabledAlert(_ permission: PermissionType, handlerForOkAction:(() -> Swift.Void)? = nil) {
+    func showDisabledAlert(_ permission: PermissionType,
+                           handlerForOkAction:(() -> Swift.Void)? = nil,
+                           handlerForCancelAction:(() -> Swift.Void)? = nil) {
         // compile the results and pass them back if necessary
         if let onDisabledOrDenied = self.onDisabledOrDenied {
             self.getResultsForConfig({ results in
@@ -1186,13 +1185,14 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         }
         
         let alert = UIAlertController(title: "%@ is currently disabled.".localized(withArguments: permission.prettyDescription.localized),
-                                      message: messageOfDisableAlert != nil ? messageOfDeniedAlert:"Please enable access to %@ in Settings".localized(withArguments: permission.prettyDescription.localized, placeholder: "%@"),
+                                      message: messageOfDisableAlert != nil ? messageOfDisableAlert:"Please enable access to %@ in Settings".localized(withArguments: permission.prettyDescription.localized, placeholder: "%@"),
                                       preferredStyle: .alert)
-        
+        alert.addAction(UIAlertAction(title: "Cancel".localized,
+                                      style: .cancel,
+                                      handler: { (action) in
+                                        handlerForCancelAction?()
+        }))
         if #available(iOS 11.0, *) {
-            alert.addAction(UIAlertAction(title: "Cancel".localized,
-                                          style: .cancel,
-                                          handler: nil))
             alert.addAction(UIAlertAction(title: "OK".localized,
                                           style: .default,
                                           handler: { (action) in
@@ -1200,11 +1200,6 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
             }))
         }
         else {
-            alert.addAction(UIAlertAction(title: "Cancel".localized,
-                                          style: .cancel,
-                                          handler: { (action) in
-                                            handlerForOkAction?()
-            }))
             alert.addAction(UIAlertAction(title: "Show me".localized,
                                           style: .default,
                                           handler: { action in
