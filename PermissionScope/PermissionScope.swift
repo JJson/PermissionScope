@@ -1188,10 +1188,11 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         let alert = UIAlertController(title: "%@ is currently disabled.".localized(withArguments: permission.prettyDescription.localized),
                                       message: messageOfDisableAlert != nil ? messageOfDeniedAlert:"Please enable access to %@ in Settings".localized(withArguments: permission.prettyDescription.localized, placeholder: "%@"),
                                       preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel".localized,
-                                      style: .cancel,
-                                      handler: nil))
+        
         if #available(iOS 11.0, *) {
+            alert.addAction(UIAlertAction(title: "Cancel".localized,
+                                          style: .cancel,
+                                          handler: nil))
             alert.addAction(UIAlertAction(title: "OK".localized,
                                           style: .default,
                                           handler: { (action) in
@@ -1199,6 +1200,11 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
             }))
         }
         else {
+            alert.addAction(UIAlertAction(title: "Cancel".localized,
+                                          style: .cancel,
+                                          handler: { (action) in
+                                            handlerForOkAction?()
+            }))
             alert.addAction(UIAlertAction(title: "Show me".localized,
                                           style: .default,
                                           handler: { action in
