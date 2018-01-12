@@ -306,7 +306,7 @@
 					D05F103D1AD1EBF6000F8267 = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = 22Y7XV72K5;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0910;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -486,7 +486,8 @@
 				PRODUCT_NAME = "PermissionScope-example";
 				PROVISIONING_PROFILE = "50f34d74-006b-4d41-a92e-9722528a1e67";
 				PROVISIONING_PROFILE_SPECIFIER = test_team;
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -503,7 +504,8 @@
 				PRODUCT_NAME = "PermissionScope-example";
 				PROVISIONING_PROFILE = "50f34d74-006b-4d41-a92e-9722528a1e67";
 				PROVISIONING_PROFILE_SPECIFIER = test_team;
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
