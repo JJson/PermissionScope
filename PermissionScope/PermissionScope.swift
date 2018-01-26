@@ -99,8 +99,8 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     
     /// Called when the user has disabled or denied access to notifications, and we're presenting them with a help dialog.
     public var onDisabledOrDenied: cancelClosureType? = nil
-	/// View controller to be used when presenting alerts. Defaults to self. You'll want to set this if you are calling the `request*` methods directly.
-	public var viewControllerForAlerts : UIViewController?
+    /// View controller to be used when presenting alerts. Defaults to self. You'll want to set this if you are calling the `request*` methods directly.
+    public weak var viewControllerForAlerts : UIViewController?
 
     public var messageOfDeniedAlert : String?
     public var messageOfDisableAlert : String?
