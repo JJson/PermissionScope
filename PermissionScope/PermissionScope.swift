@@ -1192,36 +1192,41 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
                                       handler: { (action) in
                                         handlerForCancelAction?()
         }))
-        if #available(iOS 11.0, *) {
             alert.addAction(UIAlertAction(title: "OK".localized,
                                           style: .default,
                                           handler: { (action) in
                                             handlerForOkAction?()
             }))
-        }
-        else {
-            alert.addAction(UIAlertAction(title: "Show me".localized,
-                                          style: .default,
-                                          handler: { action in
-                                            NotificationCenter.default.addObserver(self, selector: #selector(self.appForegroundedAfterSettings), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-                                            
-                                            var settingsUrl = URL(string: UIApplicationOpenSettingsURLString)
-                                            if permission == .locationInUse || permission == .locationAlways {
-                                                if #available(iOS 10.0, *) {
-                                                    settingsUrl = URL(string: "App-Prefs:root=Privacy&path=LOCATION")
-                                                    if UIApplication.shared.canOpenURL(settingsUrl!) {
-                                                        UIApplication.shared.open(settingsUrl!, options: [:], completionHandler: { (_) in
-                                                        })
-                                                    }
-                                                    
-                                                } else {
-                                                    // Fallback on earlier versions
-                                                    settingsUrl = URL(string: "prefs:root=LOCATION_SERVICES")
-                                                    UIApplication.shared.openURL(settingsUrl!)
-                                                };
-                                            }
-            }))
-        }
+//        if #available(iOS 11.0, *) {
+//            alert.addAction(UIAlertAction(title: "OK".localized,
+//                                          style: .default,
+//                                          handler: { (action) in
+//                                            handlerForOkAction?()
+//            }))
+//        }
+//        else {
+//            alert.addAction(UIAlertAction(title: "Show me".localized,
+//                                          style: .default,
+//                                          handler: { action in
+//                                            NotificationCenter.default.addObserver(self, selector: #selector(self.appForegroundedAfterSettings), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+//
+//                                            var settingsUrl = URL(string: UIApplicationOpenSettingsURLString)
+//                                            if permission == .locationInUse || permission == .locationAlways {
+//                                                if #available(iOS 10.0, *) {
+//                                                    settingsUrl = URL(string: "App-Prefs:root=Privacy&path=LOCATION")
+//                                                    if UIApplication.shared.canOpenURL(settingsUrl!) {
+//                                                        UIApplication.shared.open(settingsUrl!, options: [:], completionHandler: { (_) in
+//                                                        })
+//                                                    }
+//
+//                                                } else {
+//                                                    // Fallback on earlier versions
+//                                                    settingsUrl = URL(string: "prefs:root=LOCATION_SERVICES")
+//                                                    UIApplication.shared.openURL(settingsUrl!)
+//                                                };
+//                                            }
+//            }))
+//        }
         
         
         DispatchQueue.main.async {
