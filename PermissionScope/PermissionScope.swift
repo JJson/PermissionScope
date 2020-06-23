@@ -309,11 +309,11 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
         configuredPermissions.append(permission)
         permissionMessages[permission.type] = message
         
-        if permission.type == .bluetooth && askedBluetooth {
-            triggerBluetoothStatusUpdate()
-        } else if permission.type == .motion && askedMotion {
-            triggerMotionStatusUpdate()
-        }
+//        if permission.type == .bluetooth && askedBluetooth {
+//            triggerBluetoothStatusUpdate()
+//        } else if permission.type == .motion && askedMotion {
+//            triggerMotionStatusUpdate()
+//        }
     }
 
     /**
@@ -521,26 +521,26 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     /**
     Requests access to Contacts, if necessary.
     */
-    public func requestContacts() {
-        let status = statusContacts()
-        switch status {
-        case .unknown:
-            if #available(iOS 9.0, *) {
-                CNContactStore().requestAccess(for: .contacts, completionHandler: {
-                    success, error in
-                    self.detectAndCallback()
-                })
-            } else {
-                ABAddressBookRequestAccessWithCompletion(nil) { success, error in
-                    self.detectAndCallback()
-                }
-            }
-        case .unauthorized:
-            self.showDeniedAlert(.contacts)
-        default:
-            break
-        }
-    }
+//    public func requestContacts() {
+//        let status = statusContacts()
+//        switch status {
+//        case .unknown:
+//            if #available(iOS 9.0, *) {
+//                CNContactStore().requestAccess(for: .contacts, completionHandler: {
+//                    success, error in
+//                    self.detectAndCallback()
+//                })
+//            } else {
+//                ABAddressBookRequestAccessWithCompletion(nil) { success, error in
+//                    self.detectAndCallback()
+//                }
+//            }
+//        case .unauthorized:
+//            self.showDeniedAlert(.contacts)
+//        default:
+//            break
+//        }
+//    }
 
     // MARK: Notifications
     
@@ -572,19 +572,19 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     This function is called when we want to show the notifications
     alert, kicking off the entire process.
     */
-    @objc func showingNotificationPermission() {
-        let notifCenter = NotificationCenter.default
-        
-        notifCenter
-            .removeObserver(self,
-                            name: UIApplication.willResignActiveNotification,
-                            object: nil)
-        notifCenter
-            .addObserver(self,
-                         selector: #selector(finishedShowingNotificationPermission),
-                         name: UIApplication.didBecomeActiveNotification, object: nil)
-        notificationTimer?.invalidate()
-    }
+//    @objc func showingNotificationPermission() {
+//        let notifCenter = NotificationCenter.default
+//
+//        notifCenter
+//            .removeObserver(self,
+//                            name: UIApplication.willResignActiveNotification,
+//                            object: nil)
+//        notifCenter
+//            .addObserver(self,
+//                         selector: #selector(finishedShowingNotificationPermission),
+//                         name: UIApplication.didBecomeActiveNotification, object: nil)
+//        notificationTimer?.invalidate()
+//    }
     
     /**
     A timer that fires the event to let us know the user has asked for 
@@ -599,62 +599,62 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     See `showingNotificationPermission` for a more detailed description
     of the entire process.
     */
-    @objc func finishedShowingNotificationPermission () {
-        NotificationCenter.default.removeObserver(self,
-                                                  name: UIApplication.willResignActiveNotification,
-            object: nil)
-        NotificationCenter.default.removeObserver(self,
-                                                  name: UIApplication.didBecomeActiveNotification,
-            object: nil)
-        
-        notificationTimer?.invalidate()
-        
-        defaults.set(true, forKey: Constants.NSUserDefaultsKeys.requestedNotifications)
-        defaults.synchronize()
-
-        // callback after a short delay, otherwise notifications don't report proper auth
-        DispatchQueue.main.asyncAfter(
-            deadline: .now() + .milliseconds(100),
-            execute: {
-            self.getResultsForConfig { results in
-                guard let notificationResult = results.first(where: { $0.type == .notifications })
-                    else { return }
-                if notificationResult.status == .unknown {
-                    self.showDeniedAlert(notificationResult.type)
-                } else {
-                    self.detectAndCallback()
-                }
-            }
-        })
-    }
+//    @objc func finishedShowingNotificationPermission () {
+//        NotificationCenter.default.removeObserver(self,
+//                                                  name: UIApplication.willResignActiveNotification,
+//            object: nil)
+//        NotificationCenter.default.removeObserver(self,
+//                                                  name: UIApplication.didBecomeActiveNotification,
+//            object: nil)
+//
+//        notificationTimer?.invalidate()
+//
+//        defaults.set(true, forKey: Constants.NSUserDefaultsKeys.requestedNotifications)
+//        defaults.synchronize()
+//
+//        // callback after a short delay, otherwise notifications don't report proper auth
+//        DispatchQueue.main.asyncAfter(
+//            deadline: .now() + .milliseconds(100),
+//            execute: {
+//            self.getResultsForConfig { results in
+//                guard let notificationResult = results.first(where: { $0.type == .notifications })
+//                    else { return }
+//                if notificationResult.status == .unknown {
+//                    self.showDeniedAlert(notificationResult.type)
+//                } else {
+//                    self.detectAndCallback()
+//                }
+//            }
+//        })
+//    }
     
     /**
     Requests access to User Notifications, if necessary.
     */
-    public func requestNotifications() {
-        let status = statusNotifications()
-        switch status {
-        case .unknown:
-            let notificationsPermission = self.configuredPermissions
-                .first { $0 is NotificationsPermission } as? NotificationsPermission
-            let notificationsPermissionSet = notificationsPermission?.notificationCategories
-
-            NotificationCenter.default.addObserver(self, selector: #selector(showingNotificationPermission), name: UIApplication.willResignActiveNotification, object: nil)
-            
-            notificationTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(finishedShowingNotificationPermission), userInfo: nil, repeats: false)
-            
-            UIApplication.shared.registerUserNotificationSettings(
-                UIUserNotificationSettings(types: [.alert, .sound, .badge],
-                categories: notificationsPermissionSet)
-            )
-        case .unauthorized:
-            showDeniedAlert(.notifications)
-        case .disabled:
-            showDisabledAlert(.notifications)
-        case .authorized:
-            detectAndCallback()
-        }
-    }
+//    public func requestNotifications() {
+//        let status = statusNotifications()
+//        switch status {
+//        case .unknown:
+//            let notificationsPermission = self.configuredPermissions
+//                .first { $0 is NotificationsPermission } as? NotificationsPermission
+//            let notificationsPermissionSet = notificationsPermission?.notificationCategories
+//
+//            NotificationCenter.default.addObserver(self, selector: #selector(showingNotificationPermission), name: UIApplication.willResignActiveNotification, object: nil)
+//
+//            notificationTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(finishedShowingNotificationPermission), userInfo: nil, repeats: false)
+//
+//            UIApplication.shared.registerUserNotificationSettings(
+//                UIUserNotificationSettings(types: [.alert, .sound, .badge],
+//                categories: notificationsPermissionSet)
+//            )
+//        case .unauthorized:
+//            showDeniedAlert(.notifications)
+//        case .disabled:
+//            showDisabledAlert(.notifications)
+//        case .authorized:
+//            detectAndCallback()
+//        }
+//    }
     
     // MARK: Microphone
     
@@ -793,20 +793,20 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     /**
     Requests access to Reminders, if necessary.
     */
-    public func requestReminders() {
-        let status = statusReminders()
-        switch status {
-        case .unknown:
-            EKEventStore().requestAccess(to: .reminder,
-                completion: { granted, error in
-                    self.detectAndCallback()
-            })
-        case .unauthorized:
-            self.showDeniedAlert(.reminders)
-        default:
-            break
-        }
-    }
+//    public func requestReminders() {
+//        let status = statusReminders()
+//        switch status {
+//        case .unknown:
+//            EKEventStore().requestAccess(to: .reminder,
+//                completion: { granted, error in
+//                    self.detectAndCallback()
+//            })
+//        case .unauthorized:
+//            self.showDeniedAlert(.reminders)
+//        default:
+//            break
+//        }
+//    }
     
     // MARK: Events
     
@@ -830,20 +830,20 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     /**
     Requests access to Events, if necessary.
     */
-    public func requestEvents() {
-        let status = statusEvents()
-        switch status {
-        case .unknown:
-            EKEventStore().requestAccess(to: .event,
-                completion: { granted, error in
-                    self.detectAndCallback()
-            })
-        case .unauthorized:
-            self.showDeniedAlert(.events)
-        default:
-            break
-        }
-    }
+//    public func requestEvents() {
+//        let status = statusEvents()
+//        switch status {
+//        case .unknown:
+//            EKEventStore().requestAccess(to: .event,
+//                completion: { granted, error in
+//                    self.detectAndCallback()
+//            })
+//        case .unauthorized:
+//            self.showDeniedAlert(.events)
+//        default:
+//            break
+//        }
+//    }
     
     // MARK: Bluetooth
     
@@ -891,20 +891,20 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     /**
     Requests access to Bluetooth, if necessary.
     */
-    public func requestBluetooth() {
-        let status = statusBluetooth()
-        switch status {
-        case .disabled:
-            showDisabledAlert(.bluetooth)
-        case .unauthorized:
-            showDeniedAlert(.bluetooth)
-        case .unknown:
-            triggerBluetoothStatusUpdate()
-        default:
-            break
-        }
-        
-    }
+//    public func requestBluetooth() {
+//        let status = statusBluetooth()
+//        switch status {
+//        case .disabled:
+//            showDisabledAlert(.bluetooth)
+//        case .unauthorized:
+//            showDeniedAlert(.bluetooth)
+//        case .unknown:
+//            triggerBluetoothStatusUpdate()
+//        default:
+//            break
+//        }
+//
+//    }
     
     /**
     Start and immediately stop bluetooth advertising to trigger
@@ -936,17 +936,17 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
     /**
     Requests access to Core Motion Activity, if necessary.
     */
-    public func requestMotion() {
-        let status = statusMotion()
-        switch status {
-        case .unauthorized:
-            showDeniedAlert(.motion)
-        case .unknown:
-            triggerMotionStatusUpdate()
-        default:
-            break
-        }
-    }
+//    public func requestMotion() {
+//        let status = statusMotion()
+//        switch status {
+//        case .unauthorized:
+//            showDeniedAlert(.motion)
+//        case .unknown:
+//            triggerMotionStatusUpdate()
+//        default:
+//            break
+//        }
+//    }
     
     /**
     Prompts motionManager to request a status update. If permission is not already granted the user will be prompted with the system's permission dialog.
@@ -1263,24 +1263,24 @@ typealias resultsForConfigClosure     = ([PermissionResult]) -> Void
             permissionStatus = statusLocationAlways()
         case .locationInUse:
             permissionStatus = statusLocationInUse()
-        case .contacts:
-            permissionStatus = statusContacts()
-        case .notifications:
-            permissionStatus = statusNotifications()
+//        case .contacts:
+//            permissionStatus = statusContacts()
+//        case .notifications:
+//            permissionStatus = statusNotifications()
         case .microphone:
             permissionStatus = statusMicrophone()
         case .camera:
             permissionStatus = statusCamera()
         case .photos:
             permissionStatus = statusPhotos()
-        case .reminders:
-            permissionStatus = statusReminders()
-        case .events:
-            permissionStatus = statusEvents()
-        case .bluetooth:
-            permissionStatus = statusBluetooth()
-        case .motion:
-            permissionStatus = statusMotion()
+//        case .reminders:
+//            permissionStatus = statusReminders()
+//        case .events:
+//            permissionStatus = statusEvents()
+//        case .bluetooth:
+//            permissionStatus = statusBluetooth()
+//        case .motion:
+//            permissionStatus = statusMotion()
         }
         
         // Perform completion
